@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:background="@color/colorAccent"
+            android:gravity="center">
+
+            <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="?attr/actionModeCloseDrawable"
+                android:id="@+id/volver_Canciones"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selección"
+                android:textSize="35dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"/>
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+        </LinearLayout>
+
+        <ImageView
+
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@color/colorAccent"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/cancionA_Iv"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancionA_nombre_Tv"
+            android:text="Nombre de la canción"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancionA_artista_Tv"
+            android:text="Artista de la canción"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancion_album_Tv"
+            android:text="Album de la canción"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancion_duracion_Tv"
+            android:text="Duración"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <Button
+            android:layout_marginTop="30dp"
+            android:layout_width="100dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Escuchar"
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/escuchar_B"
+            android:layout_height="40dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
