@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class PlayList {
 
@@ -14,6 +15,7 @@ public class PlayList {
     private int numero;
     private URL imagen;
     private String descripcion;
+    private ArrayList<Cancion> canciones;
 
     public PlayList() {
     }
@@ -26,6 +28,7 @@ public class PlayList {
         this.numero = numero;
         this.imagen = imagen;
         this.descripcion = descripcion;
+        canciones = new ArrayList<Cancion>();
     }
 
     public int getId() {
@@ -62,6 +65,14 @@ public class PlayList {
 
     public int getNumero() {
         return numero;
+    }
+
+    public ArrayList<Cancion> getCanciones() {
+        return canciones;
+    }
+
+    public void setCanciones(ArrayList<Cancion> canciones) {
+        this.canciones = canciones;
     }
 
     public void setNumero(int numero) {

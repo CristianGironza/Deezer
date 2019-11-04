@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.deezer.control.CancionAdaptador;
 import com.example.deezer.modelo.Cancion;
+import com.example.deezer.modelo.Deezer;
 
 import java.util.Date;
 
@@ -25,6 +26,7 @@ public class Canciones extends AppCompatActivity {
     private TextView numero;
     private ListView seleccion;
     private CancionAdaptador adaptador;
+    private Deezer deezer = Deezer.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,9 @@ public class Canciones extends AppCompatActivity {
         seleccion = findViewById(R.id.seleccionar_Lv);
         adaptador = new CancionAdaptador();
         seleccion.setAdapter(adaptador);
+        nombre.setText(deezer.getPlayA().getTitle());
+        descripcion.setText((deezer.getPlayA().getDescripcion()));
+        numero.setText(""+deezer.getPlayA().getNumero());
 
         Cancion c = new Cancion(1, "La Viuda", "Mago de OZ", new Date(119,3,20,20,0,0), null, "GAIA", 10, null);
         adaptador.agregarCancion(c);

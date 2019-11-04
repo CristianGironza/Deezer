@@ -92,7 +92,24 @@ public class MainActivity extends AppCompatActivity {
         buscarLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                
+                final PlayList actual = (PlayList)adapterView.getItemAtPosition(i);
+                deezer.setPlayA(actual);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                        HTTPSWebUtilDomi util = new HTTPSWebUtilDomi();
+                        String url = "https://api.deezer.com/search/playlist?q="+deezer.getPlayA().getId();
+                        String json = util.GETrequest(url);
+                        JsonObject jo = new JsonParser().parse(json).getAsJsonObject();
+                        String descripcion =jo.get("description").getAsString();
+                            Log.e(">>>>>>>>",descripcion);
+                        deezer.getPlayA().setDescripcion(descripcion);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 Intent continuar = new Intent(MainActivity.this,Canciones.class);
                 startActivity(continuar);
                 finish();
