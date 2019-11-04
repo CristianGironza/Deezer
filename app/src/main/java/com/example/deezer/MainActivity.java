@@ -14,12 +14,15 @@ import android.widget.Toast;
 
 import com.example.deezer.control.HTTPSWebUtilDomi;
 import com.example.deezer.control.PlayListAdaptador;
+import com.example.deezer.modelo.Deezer;
 import com.example.deezer.modelo.PlayList;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton buscarIb;
     private ListView buscarLv;
     private PlayListAdaptador adaptador;
+    private Deezer deezer = Deezer.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
         adaptador = new PlayListAdaptador();
         buscarLv.setAdapter(adaptador);
 
-        PlayList p = new PlayList(1,null,"Rock","Cris",8,null,"Chupa");
-        adaptador.agregarPlay(p);
+        ArrayList<PlayList> listas = deezer.getListas();
+        for(int i =0; i<listas.size();i++){
+            adaptador.agregarPlay(listas.get(i));
+        }
 
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +64,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
+                            adaptador.limpiar();
+                            deezer.setListas(new ArrayList<PlayList>());
                             HTTPSWebUtilDomi util = new HTTPSWebUtilDomi();
                             String url = "https://api.deezer.com/search/playlist?q="+buscarEt.getText();
                             String json = util.GETrequest(url);
-                            JsonParser jp = new JsonParser();
-
-                            Gson g = new Gson();
+                            JsonObject jo = new JsonParser().parse(json).getAsJsonObject();
+                            JsonArray data = jo.get("data").getAsJsonArray();
+                            for (int i = 0; i < data.size(); i++){
+                                final PlayList playList = PlayList.getPlayListFromJson(data.get(i).getAsJsonObject());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adaptador.agregarPlay(playList);
+                                        deezer.getListas().add(playList);
+                                    }
+                                });
+                            }
                         }catch (IOException e){
                             e.printStackTrace();
                         }
@@ -75,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         buscarLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                
                 Intent continuar = new Intent(MainActivity.this,Canciones.class);
                 startActivity(continuar);
                 finish();

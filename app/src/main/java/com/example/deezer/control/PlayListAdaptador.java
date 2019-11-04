@@ -56,4 +56,8 @@ public class PlayListAdaptador extends BaseAdapter {
         playLists.add(play);
         notifyDataSetChanged();
     }
+
+    public void limpiar(){
+        playLists = new ArrayList<PlayList>();
+    }
 }

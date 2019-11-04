@@ -1,5 +1,8 @@
 package com.example.deezer.modelo;
 
+import com.google.gson.JsonObject;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class PlayList {
@@ -79,5 +82,24 @@ public class PlayList {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public static PlayList getPlayListFromJson(JsonObject jsonObject){
+        int id  = jsonObject.get("id").getAsInt();
+        String title  = jsonObject.get("title").getAsString();
+        JsonObject user  = jsonObject.get("user").getAsJsonObject();
+        String creador  = user.get("name").getAsString();
+        int numero  = jsonObject.get("nb_tracks").getAsInt();
+
+        String stringUrl  = jsonObject.get("picture").getAsString();
+        URL url = null;
+        try{
+            url  = new URL(stringUrl);
+        } catch (MalformedURLException ex){
+
+        }
+
+        PlayList playlist = new PlayList(id, null, title, creador, numero, url, "");
+        return playlist;
     }
 }
