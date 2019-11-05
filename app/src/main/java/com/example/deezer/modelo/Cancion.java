@@ -19,12 +19,12 @@ public class Cancion {
     private URL imagen;
     private String album;
     private String duracion;
-    private URL link;
+    private String link;
 
     public Cancion() {
     }
 
-    public Cancion(String id, String nombre, String artista, String fecha, URL imagen, String album, String duracion, URL link) {
+    public Cancion(String id, String nombre, String artista, String fecha, URL imagen, String album, String duracion, String link) {
         this.id = id;
         this.nombre = nombre;
         this.artista = artista;
@@ -47,16 +47,9 @@ public class Cancion {
         JsonObject album = jsonObject.get("album").getAsJsonObject();
         String pertenece = album.get("title").getAsString();
         String duracion = jsonObject.get("duration").getAsString();
-        String Slink = album.get("title").getAsString();
+        String Slink = jsonObject.get("link").getAsString();
         URL imagen= null;
-        URL link= null;
-        try {
-            imagen=new URL("");
-            link=new URL(Slink);
-        }catch (Exception e){
-
-        }
-        Cancion cargando = new Cancion(id,nombre, conpositor, null, imagen, pertenece, duracion, link);
+        Cancion cargando = new Cancion(id,nombre, conpositor, null, imagen, pertenece, duracion, Slink);
         return cargando;
     }
 
@@ -116,11 +109,11 @@ public class Cancion {
         this.duracion = duracion;
     }
 
-    public URL getLink() {
+    public String getLink() {
         return link;
     }
 
-    public void setLink(URL link) {
+    public void setLink(String link) {
         this.link = link;
     }
 }

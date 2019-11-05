@@ -105,6 +105,8 @@ public class Canciones extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent continuar = new Intent(Canciones.this, Seleccion.class);
+                Cancion actual = (Cancion)adapterView.getItemAtPosition(i);
+                deezer.getPlayA().setCancionA(actual);
                 startActivity(continuar);
                 finish();
             }
