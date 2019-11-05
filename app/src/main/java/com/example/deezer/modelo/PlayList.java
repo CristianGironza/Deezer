@@ -1,5 +1,7 @@
 package com.example.deezer.modelo;
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 
 import java.net.MalformedURLException;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 
 public class PlayList {
 
-    private int id;
+    private String id;
     private Cancion cancionA;
     private String titulo;
     private String creador;
@@ -16,11 +18,12 @@ public class PlayList {
     private URL imagen;
     private String descripcion;
     private ArrayList<Cancion> canciones;
+    private Boolean cambio;
 
     public PlayList() {
     }
 
-    public PlayList(int id, Cancion cancionA, String title, String creador, int numero, URL imagen, String descripcion) {
+    public PlayList(String id, Cancion cancionA, String title, String creador, int numero, URL imagen, String descripcion) {
         this.id = id;
         this.cancionA = cancionA;
         this.titulo = title;
@@ -29,13 +32,14 @@ public class PlayList {
         this.imagen = imagen;
         this.descripcion = descripcion;
         canciones = new ArrayList<Cancion>();
+        cambio=false;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -95,8 +99,16 @@ public class PlayList {
         this.descripcion = descripcion;
     }
 
+    public Boolean getCambio() {
+        return cambio;
+    }
+
+    public void setCambio(Boolean cambio) {
+        this.cambio = cambio;
+    }
+
     public static PlayList getPlayListFromJson(JsonObject jsonObject){
-        int id  = jsonObject.get("id").getAsInt();
+        String id  = jsonObject.get("id").getAsString();
         String title  = jsonObject.get("title").getAsString();
         JsonObject user  = jsonObject.get("user").getAsJsonObject();
         String creador  = user.get("name").getAsString();

@@ -17,12 +17,11 @@ import java.util.ArrayList;
 public class CancionAdaptador extends BaseAdapter {
 
     private ArrayList<Cancion> canciones;
-    private SimpleDateFormat dato;
 
 
     public CancionAdaptador(){
         canciones = new ArrayList<Cancion>();
-        dato = new SimpleDateFormat("yyyy-MMM-dd-HH:mm:ss");
+
     }
 
     @Override
@@ -53,12 +52,16 @@ public class CancionAdaptador extends BaseAdapter {
         //imagen.setBackground();
         nombre.setText(cancion.getNombre());
         artista.setText(cancion.getArtista());
-        fecha.setText(dato.format(cancion.getFecha()));
+        fecha.setText(cancion.getFecha());
         return v;
     }
 
     public void agregarCancion(Cancion cancion){
         canciones.add(cancion);
         notifyDataSetChanged();
+    }
+
+    public void limpiar() {
+        canciones =new ArrayList<Cancion>();
     }
 }

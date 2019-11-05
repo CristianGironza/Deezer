@@ -1,23 +1,30 @@
 package com.example.deezer.modelo;
 
+import android.util.Log;
+
+import com.example.deezer.control.HTTPSWebUtilDomi;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.net.URL;
 import java.util.Date;
 
 public class Cancion {
 
-    private int id;
+    private String id;
     private String nombre;
     private String artista;
-    private Date fecha;
+    private String fecha;
     private URL imagen;
     private String album;
-    private int duracion;
+    private String duracion;
     private URL link;
 
     public Cancion() {
     }
 
-    public Cancion(int id, String nombre, String artista, Date fecha, URL imagen, String album, int duracion, URL link) {
+    public Cancion(String id, String nombre, String artista, String fecha, URL imagen, String album, String duracion, URL link) {
         this.id = id;
         this.nombre = nombre;
         this.artista = artista;
@@ -28,11 +35,36 @@ public class Cancion {
         this.link = link;
     }
 
-    public int getId() {
+    public static Cancion getCancionesFromJson(JsonObject jsonObject) {
+        String id = jsonObject.get("id").getAsString();
+        String nombre = jsonObject.get("title").getAsString();
+        JsonObject artista = jsonObject.get("artist").getAsJsonObject();
+        String conpositor = artista.get("name").getAsString();
+        //Falta Fecha
+
+        //Falta Imagen
+
+        JsonObject album = jsonObject.get("album").getAsJsonObject();
+        String pertenece = album.get("title").getAsString();
+        String duracion = jsonObject.get("duration").getAsString();
+        String Slink = album.get("title").getAsString();
+        URL imagen= null;
+        URL link= null;
+        try {
+            imagen=new URL("");
+            link=new URL(Slink);
+        }catch (Exception e){
+
+        }
+        Cancion cargando = new Cancion(id,nombre, conpositor, null, imagen, pertenece, duracion, link);
+        return cargando;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -52,11 +84,11 @@ public class Cancion {
         this.artista = artista;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -76,11 +108,11 @@ public class Cancion {
         this.album = album;
     }
 
-    public int getDuracion() {
+    public String getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(int duracion) {
+    public void setDuracion(String duracion) {
         this.duracion = duracion;
     }
 

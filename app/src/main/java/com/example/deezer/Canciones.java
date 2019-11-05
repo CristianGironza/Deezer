@@ -12,12 +12,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.deezer.control.CancionAdaptador;
+import com.example.deezer.control.HTTPSWebUtilDomi;
 import com.example.deezer.modelo.Cancion;
 import com.example.deezer.modelo.Deezer;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Canciones extends AppCompatActivity {
+public class Canciones extends AppCompatActivity{
 
     private ImageButton main;
     private ImageView imagen;
@@ -32,7 +37,22 @@ public class Canciones extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canciones);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!deezer.getPlayA().getCambio()){
 
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        nombre.setText(deezer.getPlayA().getTitle());
+                        descripcion.setText((deezer.getPlayA().getDescripcion()));
+                        numero.setText("" + deezer.getPlayA().getNumero());
+                    }
+                });
+            }
+        }).start();
         main = findViewById(R.id.volver_Main);
         imagen = findViewById(R.id.playA_Iv);
         nombre = findViewById(R.id.playA_nombre_Tv);
@@ -43,17 +63,39 @@ public class Canciones extends AppCompatActivity {
         seleccion.setAdapter(adaptador);
         nombre.setText(deezer.getPlayA().getTitle());
         descripcion.setText((deezer.getPlayA().getDescripcion()));
-        numero.setText(""+deezer.getPlayA().getNumero());
+        numero.setText("" + deezer.getPlayA().getNumero());
 
-        Cancion c = new Cancion(1, "La Viuda", "Mago de OZ", new Date(119,3,20,20,0,0), null, "GAIA", 10, null);
-        adaptador.agregarCancion(c);
-        c = new Cancion(1, "La Viuda", "Mago de OZ", new Date(119,3,20,20,0,0), null, "GAIA", 10, null);
-        adaptador.agregarCancion(c);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    adaptador.limpiar();
+                    deezer.getPlayA().setCanciones(new ArrayList<Cancion>());
+                    HTTPSWebUtilDomi util = new HTTPSWebUtilDomi();
+                    String url = "https://api.deezer.com/playlist/"+deezer.getPlayA().getId()+"/tracks";
+                    String json = util.GETrequest(url);
+                    JsonObject jo = new JsonParser().parse(json).getAsJsonObject();
+                    JsonArray data = jo.get("data").getAsJsonArray();
+                    for (int i = 0; i < data.size(); i++){
+                        final Cancion cancion = Cancion.getCancionesFromJson(data.get(i).getAsJsonObject());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adaptador.agregarCancion(cancion);
+                                deezer.getPlayA().getCanciones().add(cancion);
+                            }
+                        });
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent atras = new Intent(Canciones.this,MainActivity.class);
+                Intent atras = new Intent(Canciones.this, MainActivity.class);
                 startActivity(atras);
                 finish();
             }
@@ -62,7 +104,7 @@ public class Canciones extends AppCompatActivity {
         seleccion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent continuar = new Intent(Canciones.this,Seleccion.class);
+                Intent continuar = new Intent(Canciones.this, Seleccion.class);
                 startActivity(continuar);
                 finish();
             }

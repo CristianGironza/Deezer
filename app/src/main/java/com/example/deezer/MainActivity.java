@@ -4,19 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.deezer.control.HTTPSWebUtilDomi;
 import com.example.deezer.control.PlayListAdaptador;
 import com.example.deezer.modelo.Deezer;
 import com.example.deezer.modelo.PlayList;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,7 +21,7 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private ImageButton cerrar;
     private EditText buscarEt;
@@ -44,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         buscarLv = findViewById(R.id.buscar_Lv);
         adaptador = new PlayListAdaptador();
         buscarLv.setAdapter(adaptador);
+
 
         ArrayList<PlayList> listas = deezer.getListas();
         for(int i =0; i<listas.size();i++){
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }catch (IOException e){
+                        }catch (Exception e){
                             e.printStackTrace();
                         }
                     }
@@ -94,26 +92,28 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final PlayList actual = (PlayList)adapterView.getItemAtPosition(i);
                 deezer.setPlayA(actual);
+                deezer.getPlayA().setCambio(false);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                         HTTPSWebUtilDomi util = new HTTPSWebUtilDomi();
-                        String url = "https://api.deezer.com/search/playlist?q="+deezer.getPlayA().getId();
+                        String url = "https://api.deezer.com/playlist/"+deezer.getPlayA().getId();
                         String json = util.GETrequest(url);
                         JsonObject jo = new JsonParser().parse(json).getAsJsonObject();
                         String descripcion =jo.get("description").getAsString();
-                            Log.e(">>>>>>>>",descripcion);
                         deezer.getPlayA().setDescripcion(descripcion);
+                        deezer.getPlayA().setCambio(true);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
-                });
+                }).start();
                 Intent continuar = new Intent(MainActivity.this,Canciones.class);
                 startActivity(continuar);
                 finish();
             }
         });
     }
+
 }
